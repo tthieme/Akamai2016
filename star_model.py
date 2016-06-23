@@ -116,7 +116,7 @@ def mag_field():
     This function 
     """
     
-    ###FIRST###
+    ###FIRST FIGURE###
     
     # bessel scaling
     #v_scale = 1
@@ -166,9 +166,9 @@ def mag_field():
       Br += B_r(x, y, k[j], lambda_m[j], h)
       Bz += B_z(x, y, k[j], lambda_m[j], h, B_0)
     
-    ###SECOND###
+    ###THIRD FIGURE###
     
-    # substituding values for curve graphs
+    # substituting values for curve graphs
     z1 = 0
     z2 = 0.26*R
     Bz0 = 0
@@ -179,7 +179,7 @@ def mag_field():
       Br0 += B_r(r, z2, k[u], lambda_m[u], h)/B_0
     
     ###PLOTTING###
-    # plots 
+
     # figure 1
     plt.figure(1, figsize=(8,4))
     plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
