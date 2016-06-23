@@ -178,6 +178,7 @@ def mag_field():
     
     ###PLOTTING###
     # plots 
+    # figure 1
     plt.figure(1, figsize=(8,4))
     plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
     plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
@@ -209,7 +210,8 @@ def mag_field():
     plt.tight_layout()
     plt.savefig('mag_field_plots_1.png', dpi = 800)
     plt.show()
-    
+
+    # figure 2
     plt.figure(2, figsize=(8,4))
     plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
     plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
@@ -242,6 +244,7 @@ def mag_field():
     plt.savefig('mag_field_plots_2.png', dpi = 800)
     plt.show()
     
+    # figure 3
     plt.figure(3, figsize=(8,4))
     plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
     plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
@@ -270,6 +273,7 @@ def mag_field():
     plt.savefig('mag_field_plots_3.png', dpi = 800)
     plt.show()
     
+    # figure 4
     plt.figure(4, figsize=(8,8))
     plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
     plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
@@ -283,7 +287,6 @@ def mag_field():
     plt.yticks(fontsize=8)
     plt.legend()
     
-    # fit, save and show plot
     plt.tight_layout()
     plt.savefig('mag_field_plots_4.png', dpi = 800)
     plt.show()
