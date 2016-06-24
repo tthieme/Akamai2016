@@ -180,40 +180,40 @@ def mag_field():
     
     ###PLOTTING###
 
-    # figure 1
-    plt.figure(1, figsize=(8,4))
-    plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
-    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
-    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
-    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
-    
-    plt.subplot(1,2,1) 
-    cp1 = plt.contour(x, y, Br)
-    plt.title('\n\n$B_r$', fontsize=8)
-    plt.xlabel('$r$', fontsize=8)
-    plt.ylabel('$z$', fontsize=8)
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.clabel(cp1, inline = True, fontsize = 3)
-    cb = plt.colorbar()
-    cb.ax.tick_params(labelsize = 5) # change number size on colorbar
-    
-    plt.subplot(1,2,2)
-    cp2 = plt.contour(x, y, Bz)
-    plt.title('\n\n$B_z$', fontsize=8)
-    plt.xlabel('$r$', fontsize=8)
-    plt.ylabel('$z$', fontsize=8)
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.clabel(cp2, inline = True, fontsize = 3)
-    cb = plt.colorbar()
-    cb.ax.tick_params(labelsize = 5) # change number size on colorbar
-    
-    plt.tight_layout()
-    plt.savefig('mag_field_plots_1.png', dpi = 800)
-    plt.show()
-
-#    # figure 2
+#    # figure 1
+#    plt.figure(1, figsize=(8,4))
+#    plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
+#    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
+#    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
+#    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
+#    
+#    plt.subplot(1,2,1) 
+#    cp1 = plt.contour(x, y, Br)
+#    plt.title('\n\n$B_r$', fontsize=8)
+#    plt.xlabel('$r$', fontsize=8)
+#    plt.ylabel('$z$', fontsize=8)
+#    plt.xticks(fontsize=5)
+#    plt.yticks(fontsize=5)
+#    plt.clabel(cp1, inline = True, fontsize = 3)
+#    cb = plt.colorbar()
+#    cb.ax.tick_params(labelsize = 5) # change number size on colorbar
+#    
+#    plt.subplot(1,2,2)
+#    cp2 = plt.contour(x, y, Bz)
+#    plt.title('\n\n$B_z$', fontsize=8)
+#    plt.xlabel('$r$', fontsize=8)
+#    plt.ylabel('$z$', fontsize=8)
+#    plt.xticks(fontsize=5)
+#    plt.yticks(fontsize=5)
+#    plt.clabel(cp2, inline = True, fontsize = 3)
+#    cb = plt.colorbar()
+#    cb.ax.tick_params(labelsize = 5) # change number size on colorbar
+#    
+#    plt.tight_layout()
+#    plt.savefig('mag_field_plots_1.png', dpi = 800)
+#    plt.show()
+#
+##    # figure 2
 #    plt.figure(2, figsize=(8,4))
 #    plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
 #    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
@@ -245,53 +245,53 @@ def mag_field():
 #    plt.tight_layout()
 #    plt.savefig('mag_field_plots_2.png', dpi = 800)
 #    plt.show()
-    
-    # figure 3
-    plt.figure(3, figsize=(8,4))
-    plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
-    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
-    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
-    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
-    
-    plt.subplot(1,2,1)
-    plt.plot(r, Bz0)
-    plt.title('\n\n$z-component$ $at$ $z=0$', fontsize=8)
-    plt.xlabel('$r$', fontsize=8)
-    plt.ylabel('$B_z$', fontsize=8)
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.legend()
-    
-    plt.subplot(1,2,2)
-    plt.plot(r, Br0)
-    plt.title('\n\n$r-component$ $at$ $z=0.26R$', fontsize=8)
-    plt.xlabel('$r$', fontsize=8)
-    plt.ylabel('$B_r$', fontsize=8)
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.legend()
-    
-    plt.tight_layout()
-    plt.savefig('mag_field_plots_3.png', dpi = 800)
-    plt.show()
-    
-#    # figure 4
-#    plt.figure(4, figsize=(8,8))
+#    
+#    # figure 3
+#    plt.figure(3, figsize=(8,4))
+#    plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
 #    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
 #    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
 #    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
 #    
-#    plt.quiver(x, y, Bz, Br, headlength=7)
-#    plt.title('\n\n$Model$ $of$ $Magnetic$ $Field$ $Lines$', fontsize=16)
-#    plt.xlabel('$r$', fontsize=14)
-#    plt.ylabel('$z$', fontsize=14)
-#    plt.xticks(fontsize=8)
-#    plt.yticks(fontsize=8)
+#    plt.subplot(1,2,1)
+#    plt.plot(r, Bz0)
+#    plt.title('\n\n$z-component$ $at$ $z=0$', fontsize=8)
+#    plt.xlabel('$r$', fontsize=8)
+#    plt.ylabel('$B_z$', fontsize=8)
+#    plt.xticks(fontsize=5)
+#    plt.yticks(fontsize=5)
+#    plt.legend()
+#    
+#    plt.subplot(1,2,2)
+#    plt.plot(r, Br0)
+#    plt.title('\n\n$r-component$ $at$ $z=0.26R$', fontsize=8)
+#    plt.xlabel('$r$', fontsize=8)
+#    plt.ylabel('$B_r$', fontsize=8)
+#    plt.xticks(fontsize=5)
+#    plt.yticks(fontsize=5)
 #    plt.legend()
 #    
 #    plt.tight_layout()
-#    plt.savefig('mag_field_plots_4.png', dpi = 800)
+#    plt.savefig('mag_field_plots_3.png', dpi = 800)
 #    plt.show()
+    
+    # figure 4
+    plt.figure(4, figsize=(8,8))
+    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
+    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
+    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
+    
+    plt.quiver(r, z, Br, Bz, units='y', pivot='tip')
+    plt.title('\n\n$Model$ $of$ $Magnetic$ $Field$ $Lines$', fontsize=16)
+    plt.xlabel('$r$', fontsize=14)
+    plt.ylabel('$z$', fontsize=14)
+    plt.xticks(fontsize=8)
+    plt.yticks(fontsize=8)
+    plt.legend()
+    
+    plt.tight_layout()
+    plt.savefig('mag_field_plots_4.png', dpi = 800)
+    plt.show()
     
 def B_r(r, z, k_m, lambda_m, h):
     
