@@ -23,6 +23,7 @@ import scipy as sp
 #import astropy as astro
 #import math as m
 import matplotlib.pyplot as plt
+import mayavi as maya
 #import pyqtgraph as pyqt
 #import wxpython as wxp
 
@@ -45,7 +46,7 @@ import time
 ## 
 ## ###################################
 
-# Global Variables
+# Project Info
 name = 'Travis Thieme'
 date  = time.strftime("%d/%m/%Y")
 clock = time.strftime("%H:%M:%S %Z")
@@ -66,7 +67,6 @@ def project_info(project = ''):
     print date
     print clock
     print project_name
-    
     
 def plot_bessel():
     
@@ -113,7 +113,12 @@ def bessel_j1(x, A, b):
 def mag_field():
   
     """
-    This function 
+    This function makes four separate plots. The first plot is 
+    two contour plots for Br and Bz. The second plot is two 
+    contour plots for arctan(Bz/Br) and sqrt(Br^2+Bz^2). The 
+    third plot is two line plots for the z-component and the
+    r-compontent, both with modified z values. The last plot 
+    is our graph of our magnetic field model. 
     """
     
     ###FIRST FIGURE###
@@ -125,9 +130,9 @@ def mag_field():
     # model parameters
     R = 3.8918
     k = [] # hold calculated k components
-    k.append(0.9549) # k_1
-    k.append(0.4608) # k_2
-    k.append(0.6320) # k_3
+    k.append(0.9549) # k_1, k[0]
+    k.append(0.4608) # k_2, k[1]
+    k.append(0.6320) # k_3, k[2]
     h = 0.3257
     B_0 = 3.3118 
     
@@ -143,19 +148,10 @@ def mag_field():
     # find first three bessel roots
     a_m = (sp.special.jn_zeros(1, 3))/h_scale
     
-    # check
-    #print 'r = ', r
-    #print 'z = ', z
-    #print 'k = ', k
-    #print 'a_m = ', a_m
-    
     # find first three lambda_m's
     for i in range(3):
       
       lambda_m.append((a_m[i]/R)**2)
-    
-    # check
-    #print 'lambda_m = ', lambda_m
     
     # make a mesh grid for contour plot
     x, y = np.meshgrid(r, z)
@@ -174,6 +170,8 @@ def mag_field():
     Bz0 = 0
     Br0 = 0
     
+    # calculate first three summations of Br and Bz with modified z's
+    # for line graph
     for u in range(3):
       Bz0 += B_z(r, z1, k[u], lambda_m[u], h, B_0)/B_0
       Br0 += B_r(r, z2, k[u], lambda_m[u], h)/B_0
@@ -213,7 +211,7 @@ def mag_field():
 #    plt.savefig('mag_field_plots_1.png', dpi = 800)
 #    plt.show()
 #
-##    # figure 2
+#    # figure 2
 #    plt.figure(2, figsize=(8,4))
 #    plt.suptitle('Magnetic Field Plots', fontsize=12, fontweight='bold') # Title for whole figure
 #    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
@@ -274,29 +272,35 @@ def mag_field():
 #    plt.tight_layout()
 #    plt.savefig('mag_field_plots_3.png', dpi = 800)
 #    plt.show()
+#    
+#    # figure 4
+#    plt.figure(4, figsize=(8,8))
+#    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
+#    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
+#    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
+#    
+#    plt.streamplot(r, z, Br, Bz)
+#    plt.title('\n\n$Model$ $of$ $Magnetic$ $Field$ $Lines$', fontsize=16)
+#    plt.xlabel('$r$', fontsize=14)
+#    plt.ylabel('$z$', fontsize=14)
+#    plt.xticks(fontsize=8)
+#    plt.yticks(fontsize=8)
+#    plt.legend()
+#    
+#    plt.tight_layout()
+#    plt.savefig('mag_field_plots_4.png', dpi = 800)
+#    plt.show()
     
-    # figure 4
-    plt.figure(4, figsize=(8,8))
-    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
-    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
-    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
+    # figure 5
+    #plot_full_magfield(k, lambda_m, h, B_0, R)
     
-    plt.quiver(r, z, Br, Bz, units='y', pivot='tip')
-    plt.title('\n\n$Model$ $of$ $Magnetic$ $Field$ $Lines$', fontsize=16)
-    plt.xlabel('$r$', fontsize=14)
-    plt.ylabel('$z$', fontsize=14)
-    plt.xticks(fontsize=8)
-    plt.yticks(fontsize=8)
-    plt.legend()
+    # figure 6
     
-    plt.tight_layout()
-    plt.savefig('mag_field_plots_4.png', dpi = 800)
-    plt.show()
     
 def B_r(r, z, k_m, lambda_m, h):
     
     """
-    This function 
+    This function eturns an expression for Br
     """
     
     # compontents
@@ -309,7 +313,7 @@ def B_r(r, z, k_m, lambda_m, h):
 def B_z(r, z, k_m, lambda_m, h, B_0):
     
     """   
-    This function 
+    This function returns an expression for Bz
     """
     
     # compontents
@@ -319,17 +323,45 @@ def B_z(r, z, k_m, lambda_m, h, B_0):
     
     return a*b*sp.special.j0(b*r)*((sp.special.erfc((b*c)/2 + (z/c))*np.exp((b*z))) + (sp.special.erfc((b*c)/2 - (z/c))*np.exp((-b*z))))+B_0
     
+def plot_full_magfield(k, lambda_m, h, B_0, R):    
     
+    """   
+    This function graphs our magnetic field model from r = (-1,1)
+    """
     
+    # intervals for r and z values
+    r = np.linspace(-1, 1, 100)*R
+    z = np.linspace(-0.5, 0.5, 100)*R
     
+    # equation constants
+    Br = 0
+    Bz = 0
     
+    # make a mesh grid for contour plot
+    x, y = np.meshgrid(r, z)
     
+    # calculate first three summations of Br and Bz    
+    for j in range(3):
+      
+      Br += B_r(x, y, k[j], lambda_m[j], h)
+      Bz += B_z(x, y, k[j], lambda_m[j], h, B_0)
     
+    plt.figure(5, figsize=(8,8))
+    plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
+    plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
+    plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
     
+    plt.streamplot(r, z, Br, Bz)
+    plt.title('\n\n$Model$ $of$ $Magnetic$ $Field$ $Lines$ $from$ $(-1,1)$', fontsize=16)
+    plt.xlabel('$r$', fontsize=14)
+    plt.ylabel('$z$', fontsize=14)
+    plt.xticks(fontsize=8)
+    plt.yticks(fontsize=8)
+    plt.legend()
     
+    plt.tight_layout()
+    plt.savefig('mag_field_plots_5.png', dpi = 800)
+    plt.show()
     
-    
-    
-    
-    
+
     
