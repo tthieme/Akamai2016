@@ -23,9 +23,9 @@ import scipy as sp
 #import astropy as astro
 #import math as m
 import matplotlib.pyplot as plt
-import mayavi as maya
+#import mayavi as maya
 #import pyqtgraph as pyqt
-#import wxpython as wxp
+#import wx as wxp
 
 #import pandas
 #import random
@@ -67,7 +67,7 @@ def project_info(project = ''):
     print date
     print clock
     print project_name
-    
+
 def plot_bessel():
     
     """
@@ -292,7 +292,7 @@ def mag_field():
 #    plt.show()
     
     # figure 5
-    #plot_full_magfield(k, lambda_m, h, B_0, R)
+    plot_full_magfield(k, lambda_m, h, B_0, R)
     
     # figure 6
     
