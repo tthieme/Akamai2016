@@ -34,39 +34,6 @@ import time
 
 #from scipy.optimize import fsolve, root, findRoot
 
-## ###################################
-##
-## Author: Travis Thieme
-## Created on: June 21th, 2016
-##
-## Application Name: Plotting and Fitting
-## Programming Language: Python
-## 
-## Description: This program 
-## 
-## ###################################
-
-# Project Info
-name = 'Travis Thieme'
-date  = time.strftime("%d/%m/%Y")
-clock = time.strftime("%H:%M:%S %Z")
-
-def project_info(project = ''):
-
-    """
-    This function prints the info for the project your working on. Info such as author,
-    date, current time, and the project name.
-    """
-    
-    name = 'Travis Thieme'
-    date = time.strftime("%A, %d/%m/%Y")
-    clock = time.strftime("%H:%M:%S %Z")
-    project_name = project
-
-    print name
-    print date
-    print clock
-    print project_name
 
 def plot_bessel():
     
