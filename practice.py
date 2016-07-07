@@ -140,21 +140,7 @@ def mayavi():
     # find first three lambda_m's
     for i in range(3):
       
-      lambda_m.append((a_m[i]/R)**2)
-    
-    ############################################################  
-    ## import mayavi as maya 
-    ## Br = sqrt(Bx*Bx+By*By)
-    ## theta = arctan(y/x)
-    ## Bx = Br*cos(theta)
-    ## By = Brefresh mayavi figure in same scener*sin(theta)
-    ############################################################  
-    ## mayavi.mlab.quiver3d(x, y, z, u, v, w, ...)
-    ##
-    ## If 6 arrays, (x, y, z, u, v, w) are passed, the 
-    ## 3 first arrays give the position of the arrows, and 
-    ## the 3 last the components. They can be of any shape.
-    ############################################################  
+      lambda_m.append((a_m[i]/R)**2) 
     
     # calculate first three summations of Br and Bz    
     for j in range(3):
@@ -162,7 +148,7 @@ def mayavi():
       Br += B_r(rr, zz, k[j], lambda_m[j], h)
       Bz += B_z(rr, zz, k[j], lambda_m[j], h, B_0)
     
-    # calculate theta, 
+    # calculate theta for Bx and By 
     theta = np.arctan2(yy,xx) # use arctan2 for choosing the quadrant correctly
     
     # calculate Bx and By
@@ -188,7 +174,6 @@ def mayavi():
     np.set_printoptions(threshold='nan')
     Sq = np.empty([10,100])
     Su = np.empty([10,100])
-    #SD = np.empty([10,100])
     
     # intervals for r and z values
     r = np.linspace(-R, R, 100)
@@ -203,7 +188,6 @@ def mayavi():
         
         Sq[j][k] = 0
         Su[j][k] = 0
-        #SD[j][k] = 0
         
         for i in range(10):
           
@@ -216,15 +200,12 @@ def mayavi():
           
           Q = np.cos(2*theta_p)
           U = np.sin(2*theta_p)
-          #D = density2(i, j, k)
           
           
           Sq[j][k] += Q
           Su[j][k] += U
-          #SD[j][k] += D
          
-    #print x
-    print Sq
+    #print Sq
     #print Su
     #print np.shape(Sq)
     #print np.shape(Su)
@@ -262,6 +243,20 @@ def mayavi():
     plt.savefig('stokes_param.png', dpi = 800)
     plt.show()
     
+    ############################################################  
+    ## import mayavi as maya 
+    ## Br = sqrt(Bx*Bx+By*By)
+    ## theta = arctan(y/x)
+    ## Bx = Br*cos(theta)
+    ## By = Brefresh mayavi figure in same scener*sin(theta)
+    ############################################################  
+    ## mayavi.mlab.quiver3d(x, y, z, u, v, w, ...)
+    ##
+    ## If 6 arrays, (x, y, z, u, v, w) are passed, the 
+    ## 3 first arrays give the position of the arrows, and 
+    ## the 3 last the components. They can be of any shape.
+    ############################################################ 
+    
     # plot components in Mayavi
     #ml.figure(fgcolor=(0, 0, 0))
     #ml.quiver3d(xx,yy,zz,Bx,By,Bz, colormap='spectral', mode='2ddash')
@@ -272,8 +267,7 @@ def mayavi():
     52.6373670495
     8.77349747277
     '''
-    
-    
+     
 def B_r(r, z, k_m, lambda_m, h):
     
     """
