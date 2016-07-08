@@ -25,6 +25,8 @@ import scipy as sp
 #import astropy as astro
 #import math as m
 import matplotlib.pyplot as plt
+#import mplot3d.axes3d as plt3
+from mpl_toolkits.mplot3d import Axes3D
 import mayavi.mlab as ml
 #import pyqtgraph as pyqt
 #import wx as wxp
@@ -76,14 +78,11 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
     """
     # select which plot to show
     # 1 for PLOT 1, 2 for PLOT 2, etc.
-    # 0 for all plots
-    print 'Which plot would you like to display? '
-    print 'For plot 1, please type 1'
-    print 'For plot 2, please type 2'
-    print 'For plot 3, please type 3'
-    print 'For plot 4, please type 4'
-    print 'For plot 5, please type 5'
-    print 'For plot 6, please type 6'
+    # all for all plots
+    # info for plot info
+    print 'Which plot would you like to display?\n'
+    for i in range(1,9): # number of plots total
+      print 'For plot ', i, ', please type ', i
     print 'For all plots, please type all'
     print 'For info on all the plots, please type info'
     print_which = str(raw_input("Plot #: "))
@@ -95,14 +94,24 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
     k.append(k3) # k_3, k[2] 
     lambda_m = []
     lambda_m = lambda_m_calc(h_scale, R)
+
+    ############################################################## 
+    ### PLOT 1 ###################################################
+    ##############################################################      
     
     if print_which == '1' or print_which == 'all':
-      ###PLOT 1###
+      ############################################################  
+      ## These two contour plots show the representations of 
+      ## Br and Bz in terms of r and z components. 
+      ############################################################
+    
+      ### PLOT 
       r = np.linspace(-1, 1, 100)*R
       z = np.linspace(-0.5, 0.5, 100)*R
       x, y = mesh_grid(r,z,R)
       Br, Bz = calc_Br_Bz(x,y,k,lambda_m,h,B_0)
-      figure_info(1, title='Magnetic Field Plots', subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}$'.format(k1,k2,k3))
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1,k2,k3,R,h,B_0)
+      figure_info(1, title='Magnetic Field Plot 1', subtitle=subtitle)
       plt.subplot(1,2,1)
       plot_contour(x,y,Br,title='\n\n$B_r$',xlab='$r$',ylab='$z$')
       plt.subplot(1,2,2)
@@ -110,27 +119,48 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
       plt.tight_layout()
       plt.savefig('mag_field_plots_1.png', dpi = 800)
       plt.show()
+
+    ############################################################## 
+    ### PLOT 2 ###################################################
+    ##############################################################      
     
     if print_which == '2' or print_which == 'all':
-      ###PLOT 2###
+      ############################################################  
+      ## These two contour plots show the representations of 
+      ## arctan(Bz/Br) and sqrt(Br^2+Bz^2) in terms of r and 
+      ## z components. 
+      ############################################################
+      
+      ### PLOT
       r = np.linspace(-1, 1, 100)*R
       z = np.linspace(-0.5, 0.5, 100)*R
       x, y = mesh_grid(r,z,R)
       Br, Bz = calc_Br_Bz(x,y,k,lambda_m,h,B_0)
-      figure_info(2, title='Magnetic Field Plots')
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1,k2,k3,R,h,B_0)
+      figure_info(2, title='Magnetic Field Plot 2',subtitle=subtitle)
       plt.subplot(1,2,1)
-      plot_contour(x,y,np.arctan(Bz/Br),title='\n\n$arctan^{-1}(B_z/B_r)$',xlab='$r$',ylab='$z$')
+      plot_contour(x,y,np.arctan(Bz/Br),title='\n\n$tan^{-1}(B_z/B_r)$',xlab='$r$',ylab='$z$')
       plt.subplot(1,2,2)
       plot_contour(x,y,np.sqrt((Bz**2)+(Br**2)),title='\n\n$\sqrt{Bz^{2}+Br^{2}}$',xlab='$r$',ylab='$z$')
       plt.tight_layout()
       plt.savefig('mag_field_plots_2.png', dpi = 800)
       plt.show()
+
+    ############################################################## 
+    ### PLOT 3 ###################################################
+    ##############################################################      
     
     if print_which == '3' or print_which == 'all':
-      ###PLOT 3###
+      ############################################################  
+      ## These line plots show the features of Br and Bz by using
+      ## modified z components to get a 2D line graph. 
+      ############################################################
+      
+      ### PLOT 
       r = np.linspace(0, 1, 100)*R
       Br0, Bz0 = calc_Br_Bz_mod(k,lambda_m,h,B_0,R,r)
-      figure_info(3, title='Magnetic Field Plots')
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1,k2,k3,R,h,B_0)
+      figure_info(3, title='Magnetic Field Plot 3',subtitle=subtitle)
       plt.subplot(1,2,1)
       plot(r,Bz0,title='\n\n$z-component$ $at$ $z=0$',xlab = '$r$',ylab='$B_z$')
       plt.subplot(1,2,2)
@@ -139,29 +169,60 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
       plt.savefig('mag_field_plots_3.png', dpi = 800)
       plt.show()
     
+    ############################################################## 
+    ### PLOT 4 ###################################################
+    ##############################################################   
+    
     if print_which == '4' or print_which == 'all':
-      ###PLOT 4###
+      ############################################################  
+      ## This plots a representation of the magnetic field based
+      ## on the r, z, Br, and Bz components so we can look at the
+      ## actual lines creatd by the formulas.
+      ############################################################
+      
+      ### PLOT 
       r = np.linspace(-1, 1, 100)*R
       z = np.linspace(-0.5, 0.5, 100)*R
       x, y = mesh_grid(r,z,R)
       Br, Bz = calc_Br_Bz(x,y,k,lambda_m,h,B_0)
-      figure_info(4, title='Magnetic Field Plots',size = (8,8))
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1,k2,k3,R,h,B_0)
+      figure_info(4, title='Magnetic Field Plot 4',size = (8,8),subtitle=subtitle,subxpos=0.5, subypos=0.945)
       plot_streamplot(r,z,Br,Bz,title='\n\n$Model$ $of$ $Magnetic$ $Field$ $Lines$',xlab = '$r$',ylab='$z$')
       plt.tight_layout()
       plt.savefig('mag_field_plots_4.png', dpi = 800)
       plt.show()
+
+    ##############################################################
+    ### PLOT 5 ###################################################
+    ##############################################################   
     
     if print_which == '5' or print_which == 'all':
-      ###PLOT 5###
+      ############################################################  
+      ## This is a plot of stokes parameters Q and U found from
+      ## the Bx, By and Bz vector components. 
+      ############################################################  
+      ## WARNING
+      ## If you change the number of points in r and z, you must
+      ## change the corresponding points in the mgrid for yy and
+      ## zz. As well as the values in the for loop for y and z 
+      ## when you calculate Q and U and the array size for 
+      ## Sq and Su.
+      ############################################################  
+      
+      ### PLOT      
       r = np.linspace(-1, 1, 100)*R
-      z = np.linspace(-0.5, 0.5, 10)*R
+      z = np.linspace(-0.5, 0.5, 100)*R
       x, y = np.meshgrid(r,z)
-      xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:10j, -0.5:0.5:100j]*R
+      xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:100j, -0.5:0.5:100j]*R
       rr = np.sqrt(xx*xx+yy*yy)      
       Br, Bz = calc_Br_Bz(rr,zz,k,lambda_m,h,B_0)
       Bx, By= calc_BxBy(Br,xx,yy)
+      Bx *= density(xx, yy, zz, R, h)
+      By *= density(xx, yy, zz, R, h)
+      Bz *= density(xx, yy, zz, R, h)
       Q, U = calc_Sq_Su(By, Bz)
-      figure_info(5, title='Stokes Parameters: Q and U')
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1, k2, k3, R, h, B_0)
+      figure_info(5, title='Stokes Parameters: Q and U',subtitle=subtitle)
       plt.subplot(1,2,1)
       plot_contour(x,y,Q,title='\n\n$Q$',xlab='$r$',ylab='$z$')
       plt.subplot(1,2,2)
@@ -169,15 +230,23 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
       plt.tight_layout()
       plt.savefig('stokes_param.png', dpi = 800)
       plt.show()
-      
+    
+    ############################################################## 
+    ### PLOT 6 ###################################################
+    ##############################################################  
+    
     if print_which == '6' or print_which == 'all':
-      ###PLOT 6###
+      ############################################################  
+      ## This is the mayavi3d version of the magnetic field
+      ## in plot 4. This opens a seperate window where you
+      ## can see a 3D visualization and rotate it about
+      ## any axis.
       ############################################################  
       ## import mayavi as maya 
       ## Br = sqrt(Bx*Bx+By*By)
       ## theta = arctan(y/x)
       ## Bx = Br*cos(theta)
-      ## By = Brefresh mayavi figure in same scener*sin(theta)
+      ## By = Br*sin(theta)
       ############################################################  
       ## mayavi.mlab.quiver3d(x, y, z, u, v, w, ...)
       ##
@@ -185,6 +254,52 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
       ## 3 first arrays give the position of the arrows, and 
       ## the 3 last the components. They can be of any shape.
       ############################################################ 
+      
+      ### PLOT      
+      xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:10j, -0.5:0.5:100j]*R
+      rr = np.sqrt(xx*xx+yy*yy)
+      Br, Bz = calc_Br_Bz(rr,zz,k,lambda_m,h,B_0)
+      Bx, By= calc_BxBy(Br,xx,yy)
+      Bx *= density(xx, yy, zz, R, h)
+      By *= density(xx, yy, zz, R, h)
+      Bz *= density(xx, yy, zz, R, h)
+      ml.figure(fgcolor=(0, 0, 0),bgcolor=(0,0,0))
+      ml.quiver3d(xx,yy,zz,Bx,By,Bz, colormap='spectral', mode='2ddash')
+      ml.savefig('mag_field_mayavi.png')     
+      ml.show()
+
+    ############################################################## 
+    ### PLOT 7 ###################################################
+    ##############################################################      
+    
+    if print_which == '7' or print_which == 'all':
+      ############################################################  
+      ## This graph is the mplot3d version of the mayavi3d graph.
+      ## You can set the rotation of the xy and z axis by
+      ## entering an integer (in degrees) between -360 and 360
+      ## for either axis.
+      ############################################################      
+      
+      print '\n'      
+      print 'Please enter the rotation parameters for plot 7.'
+      print 'You can rotate this graph in the xy direction and \nthe z direction.'
+      print 'The xy direction is set at 0 degrees to be looking \nat the x-axis.'
+      print 'The z direction is set at 0 degrees to be vertically \noriented.'
+      print 'Please enter an integer from -360 to 360'
+      try:
+        rotate_xy = int(raw_input("Rotation amount in xy direction (degrees): ")) 
+      except:
+        ###ERROR###
+        print 'Error! Try again.'
+        print 'Please enter an integer (in degrees) from -360 to 360'
+      try:
+        rotate_z = int(raw_input("Rotation amount in z direction (degrees): ")) 
+      except:
+        ###ERROR###
+        print 'Error! Try again.'
+        print 'Please enter an integer (in degrees) from -360 to 360'
+      
+      ### PLOT
       xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:10j, -0.5:0.5:100j]*R
       rr = np.sqrt(xx*xx+yy*yy)
       Br, Bz = calc_Br_Bz(rr,zz,k,lambda_m,h,B_0)
@@ -192,15 +307,79 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
       Bx *= density2(xx, yy, zz)
       By *= density2(xx, yy, zz)
       Bz *= density2(xx, yy, zz)
-      ml.figure(fgcolor=(0, 0, 0))
-      ml.quiver3d(xx,yy,zz,Bx,By,Bz, colormap='spectral', mode='2ddash')
-      ml.show()
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1,k2,k3,R,h,B_0)
+      fig = figure_info(7, title='3D Magnetic Field Plot (6) using mplot3d',size = (8,8),subtitle=subtitle,subxpos=0.5, subypos=0.945)
+      plot_3d_quiver(fig,xx,yy,zz,Bx,By,Bz,rotate_xy,rotate_z)      
+      plt.tight_layout()
+      plt.savefig('3D_mag_field_plots', dpi = 800)
+      plt.show()
+
+    ############################################################## 
+    ### PLOT 8 ###################################################
+    ############################################################## 
+
+    if print_which == '8' or print_which == 'all':
+      ############################################################  
+      ## This graph is the mplot3d version of the mayavi3d graph.
+      ## You can set the rotation of the xy and z axis by
+      ## entering an integer (in degrees) between -360 and 360
+      ## for either axis.
+      ############################################################
+
+      print '\n'      
+      print 'Please enter the rotation parameters for plot 8.'
+      print 'You can rotate this graph in the xy direction and \nthe z direction.'
+      print 'The xy direction is set at 0 degrees to be looking \nat the x-axis.'
+      print 'The z direction is set at 0 degrees to be vertically \noriented.'
+      print 'Please enter an integer from -360 to 360'
+      try:
+        rotate_xy = int(raw_input("Rotation amount in xy direction (degrees): ")) 
+      except:
+        ###ERROR###
+        print 'Error! Try again.'
+        print 'Please enter an integer (in degrees) from -360 to 360'
+      try:
+        rotate_z = int(raw_input("Rotation amount in z direction (degrees): ")) 
+      except:
+        ###ERROR###
+        print 'Error! Try again.'
+        print 'Please enter an integer (in degrees) from -360 to 360'
+      
+      ### PLOT
+      r = np.linspace(-1, 1, 100)*R
+      z = np.linspace(-0.5, 0.5, 100)*R
+      x, y = np.meshgrid(r,z)
+      xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:100j, -0.5:0.5:100j]*R
+      rr = np.sqrt(xx*xx+yy*yy)      
+      Br, Bz = calc_Br_Bz(rr,zz,k,lambda_m,h,B_0)
+      Bx, By= calc_BxBy(Br,xx,yy)
+      Bx *= density(xx, yy, zz, R, h)
+      By *= density(xx, yy, zz, R, h)
+      Bz *= density(xx, yy, zz, R, h)
+      Q, U = calc_Sq_Su(By, Bz)
+      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1, k2, k3, R, h, B_0)
+      fig = figure_info(8, title='Stokes Parameters: Q and U',subtitle=subtitle)
+      #plt.subplot(1,2,1)
+      plot_3d_contour(fig,x,y,Q,rotate_xy,rotate_z)
+      #plt.subplot(1,2,2)
+      #plot_3d_contour(fig,x,y,U,rotate_xy,rotate_z)
+      plt.tight_layout()
+      plt.savefig('3D_stokes_param', dpi = 800)
+      plt.show()
+
+    ############################################################## 
+    ### INFO #####################################################
+    ##############################################################      
     
     if print_which == 'info':
       ###DISPLAY GRAPH INFO###
       print graph_info()
     
-    if print_which not in ('1','2','3','4','5','6'):
+    ############################################################## 
+    ### ERROR ####################################################
+    ##############################################################      
+    
+    if print_which not in ('1','2','3','4','5','6','7','8','all','info'):
       ###ERROR###
       print 'Error!'
       print 'Input', str(print_which), 'not recognized.'
@@ -212,18 +391,44 @@ def graph_info():
     This function displays info for what each plot is.
     """
     
+def plot_3d_contour(fig,x,y,z,rotate_xy,rotate_z):   
+  
+    """
+    This function 
+    """
+
+    ax = fig.gca(projection='3d')
+    ax.contour(x,y,z)
+    ax.view_init(elev=90+rotate_z,azim=90+rotate_xy)
+    ax.set_xlabel('x', fontsize=8)
+    ax.set_ylabel('y', fontsize=8)
+    ax.set_zlabel('z', fontsize=8)
+    
+def plot_3d_quiver(fig,x,y,z,X,Y,Z,rotate_xy,rotate_z):   
+  
+    """
+    This function 
+    """
+    
+    ax = fig.gca(projection='3d')
+    ax.quiver(x,y,z,X,Y,Z,length=0.05)
+    ax.view_init(elev=0+rotate_z,azim=90+rotate_xy)
+    ax.set_xlabel('x', fontsize=8)
+    ax.set_ylabel('y', fontsize=8)
+    ax.set_zlabel('z', fontsize=8)
+      
 def calc_Sq_Su(By, Bz):
 
     """
     This function calculates the Q and U for Stokes parameters.
     """
     
-    Sq = np.empty([10,100])
-    Su = np.empty([10,100])
+    Sq = np.empty([100,100])
+    Su = np.empty([100,100])
     
     for k in range(100):
       
-      for j in range(10):
+      for j in range(100):
         
         Sq[j][k] = 0
         Su[j][k] = 0
@@ -339,20 +544,21 @@ def calc_Br_Bz_mod(k,lambda_m,h,B_0,R,r):
       
     return Br0, Bz0
       
-def figure_info(fignum,title='',size=(8,4), subtitle=''):
+def figure_info(fignum,title='',size=(8,4), subtitle='', subxpos=0.5, subypos=0.92):
   
     """
     This function is to set the info for a given figure. Parameters include
     fignum, title, and size.
     """
     
-    plt.figure(fignum, size)
-    plt.suptitle(title, fontsize=12, fontweight='bold') # Title for whole figure
-    plt.title(subtitle, fontsize=12, fontstyle='italic')
+    fig = plt.figure(fignum, size)
+    plt.suptitle(title, fontsize=12, fontweight='bold') # Title for whole figure   
+    plt.figtext(subxpos,subypos,subtitle, size=6,horizontalalignment='center',verticalalignment='center')    
     plt.figtext(0.01,0.97,'Created by: ' + name, size=5) # Add created by to top left corner
     plt.figtext(0.01,0.95, 'Todays Date: '  + date, size=5) # Add date to top left corner
     plt.figtext(0.01,0.93,'Time:  ' + clock, size=5) # Add clock time to top left corner
     
+    return fig
 
 def plot_contour(x,y,z,title='',xlab = '',ylab=''):
     
@@ -429,8 +635,12 @@ def density(x, y, z, R, h):
     
     # parameters
     row_0 = 10**7
+    a = 1
+    b = 1
+    ### turnover at: a=68, b=68
+    ### At 68, Q changes dramatically but U looks similar still
     
-    return row_0*np.exp(-(x*x+y*y)/R*R)*np.exp(-(z*z)/h*h)
+    return row_0*np.exp(-a*(x*x+y*y)/R*R)*np.exp(-b*(z*z)/h*h)
     
 def density2(x, y, z):
     
