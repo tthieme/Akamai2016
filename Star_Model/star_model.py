@@ -25,9 +25,10 @@ import scipy as sp
 #import astropy as astro
 #import math as m
 import matplotlib.pyplot as plt
-#import mplot3d.axes3d as plt3
 from mpl_toolkits.mplot3d import Axes3D
 import mayavi.mlab as ml
+import skimage.transform as image
+#import vpython as visual
 #import pyqtgraph as pyqt
 #import wx as wxp
 
@@ -314,58 +315,55 @@ def magnetic_field(v_scale = 1, h_scale = 1, R = 3.8918, k1 = 0.9549, k2 = 0.460
       plt.savefig('3D_mag_field_plots', dpi = 800)
       plt.show()
 
-    ############################################################## 
-    ### PLOT 8 ###################################################
-    ############################################################## 
-
-    if print_which == '8' or print_which == 'all':
-      ############################################################  
-      ## This graph is the mplot3d version of the mayavi3d graph.
-      ## You can set the rotation of the xy and z axis by
-      ## entering an integer (in degrees) between -360 and 360
-      ## for either axis.
-      ############################################################
-
-      print '\n'      
-      print 'Please enter the rotation parameters for plot 8.'
-      print 'You can rotate this graph in the xy direction and \nthe z direction.'
-      print 'The xy direction is set at 0 degrees to be looking \nat the x-axis.'
-      print 'The z direction is set at 0 degrees to be vertically \noriented.'
-      print 'Please enter an integer from -360 to 360'
-      try:
-        rotate_xy = int(raw_input("Rotation amount in xy direction (degrees): ")) 
-      except:
-        ###ERROR###
-        print 'Error! Try again.'
-        print 'Please enter an integer (in degrees) from -360 to 360'
-      try:
-        rotate_z = int(raw_input("Rotation amount in z direction (degrees): ")) 
-      except:
-        ###ERROR###
-        print 'Error! Try again.'
-        print 'Please enter an integer (in degrees) from -360 to 360'
-      
-      ### PLOT
-      r = np.linspace(-1, 1, 100)*R
-      z = np.linspace(-0.5, 0.5, 100)*R
-      x, y = np.meshgrid(r,z)
-      xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:100j, -0.5:0.5:100j]*R
-      rr = np.sqrt(xx*xx+yy*yy)      
-      Br, Bz = calc_Br_Bz(rr,zz,k,lambda_m,h,B_0)
-      Bx, By= calc_BxBy(Br,xx,yy)
-      Bx *= density(xx, yy, zz, R, h)
-      By *= density(xx, yy, zz, R, h)
-      Bz *= density(xx, yy, zz, R, h)
-      Q, U = calc_Sq_Su(By, Bz)
-      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1, k2, k3, R, h, B_0)
-      fig = figure_info(8, title='Stokes Parameters: Q and U',subtitle=subtitle)
-      #plt.subplot(1,2,1)
-      plot_3d_contour(fig,x,y,Q,rotate_xy,rotate_z)
-      #plt.subplot(1,2,2)
-      #plot_3d_contour(fig,x,y,U,rotate_xy,rotate_z)
-      plt.tight_layout()
-      plt.savefig('3D_stokes_param', dpi = 800)
-      plt.show()
+#    ############################################################## 
+#    ### PLOT 8 ###################################################
+#    ############################################################## 
+#
+#    if print_which == '8' or print_which == 'all':
+#      ############################################################  
+#      ## 
+#      ############################################################
+#
+#      print '\n'      
+#      print 'Please enter the rotation parameters for plot 8.'
+#      print 'You can rotate this graph in the xy direction and \nthe z direction.'
+#      print 'The xy direction is set at 0 degrees to be looking \nat the x-axis.'
+#      print 'The z direction is set at 0 degrees to be vertically \noriented.'
+#      print 'Please enter an integer from -360 to 360'
+#      try:
+#        rotate_xy = int(raw_input("Rotation amount in xy direction (degrees): ")) 
+#      except:
+#        ###ERROR###
+#        print 'Error! Try again.'
+#        print 'Please enter an integer (in degrees) from -360 to 360'
+#      try:
+#        rotate_z = int(raw_input("Rotation amount in z direction (degrees): ")) 
+#      except:
+#        ###ERROR###
+#        print 'Error! Try again.'
+#        print 'Please enter an integer (in degrees) from -360 to 360'
+#      
+#      ### PLOT
+#      r = np.linspace(-1, 1, 100)*R
+#      z = np.linspace(-0.5, 0.5, 100)*R
+#      x, y = np.meshgrid(r,z)
+#      xx, yy, zz = np.mgrid[-0.5:0.5:10j, -0.5:0.5:100j, -0.5:0.5:100j]*R
+#      rr = np.sqrt(xx*xx+yy*yy)      
+#      Br, Bz = calc_Br_Bz(rr,zz,k,lambda_m,h,B_0)
+#      Bx, By= calc_BxBy(Br,xx,yy)
+#      Bx *= density(xx, yy, zz, R, h)
+#      By *= density(xx, yy, zz, R, h)
+#      Bz *= density(xx, yy, zz, R, h)
+#      Q, U = calc_Sq_Su(By, Bz)
+#      subtitle='$k_1 = {0}, k_2 = {1}, k_3 = {2}, R = {3}, h = {4}, B_0 = {5}$'.format(k1, k2, k3, R, h, B_0)
+#      fig = figure_info(8, title='Stokes Parameters: Q and U',subtitle=subtitle)
+#      #plt.subplot(1,2,1)
+#      plot_3d_contour(fig,x,y,Q,rotate_xy,rotate_z)
+#      #plt.subplot(1,2,2)
+#      #plot_3d_contour(fig,x,y,U,rotate_xy,rotate_z)
+#      plt.tight_layout()
+#      plt.savefig('3D_stokes_param', dpi = 800)
+#      plt.show()
 
     ############################################################## 
     ### INFO #####################################################
@@ -434,17 +432,29 @@ def calc_Sq_Su(By, Bz):
         Su[j][k] = 0
         
         for i in range(10):
-          
+
           Byy = By[i][j][k]
           Bzz = Bz[i][j][k]
-          #print By[i][j][k]
           
-          theta = np.arctan2(Bzz,Byy)
+          theta = 135
+          y_rot = Byy*np.cos(theta) - Bzz*np.sin(theta)
+          z_rot = Byy*np.sin(theta) +  Bzz*np.cos(theta)
+#          
+#          vector = visual.vector(0, By[i][j][k], Bz[i][j][k])
+#          
+#          rotate = visual.rotate(vector,angle=visual.radians(145),axis=Bz[i][j][k])
+#
+#          Byy = float(rotate.y)
+#          Bzz = float(rotate.z)
+          
+#          Byz = [By[i][j][k],Bz[i][j][k]]
+#          sp.ndimage.interpolation.rotate(Byz, 45)
+          
+          theta = np.arctan2(z_rot,y_rot)
           theta_p = (np.pi/2) + theta
           
           Q = np.cos(2*theta_p)
           U = np.sin(2*theta_p)
-          
           
           Sq[j][k] += Q
           Su[j][k] += U
